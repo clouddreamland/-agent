@@ -39,8 +39,6 @@ class ChatRequest(BaseModel):
 
 class KbInitRequest(BaseModel):
     texts: list[str]
-
-
 # ==========================================
 # 核心聊天接口111222
 # ==========================================
