@@ -1,0 +1,23 @@
+# AI Model directories (Very large files)
+models--BAAI--bge-small-zh-v1.5/
+models--Qwen--Qwen2.5-0.5B-Instruct/
+
+# Python junk
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Editor settings
+.idea/
+.vscode/
+.trae/
+
+# Output folders
+ppts/
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
