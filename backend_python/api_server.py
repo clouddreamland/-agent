@@ -2,7 +2,9 @@ import os
 import json
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-os.environ["HF_HOME"] = "D:/huggingface_cache"
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
+os.environ["HF_HOME"] = os.path.join(PROJECT_ROOT, "models")
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
@@ -30,6 +32,42 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.on_event("startup")
+async def startup_event():
+    """应用启动时执行健康检查"""
+    print("\n" + "🚀" * 30)
+    print("  正在进行系统健康检查...")
+    print("🚀" * 30 + "\n")
+    
+    # 检查 PPT 引擎
+    try:
+        from ppt_engine_v2 import export_to_ppt, SlideDesigner
+        print("✅ PPT Engine V2 加载成功")
+        
+        # 尝试导入 SVG 转换引擎
+        try:
+            from svg_to_pptx.pptx_builder import create_pptx_with_native_svg
+            print("✅ SVG → DrawingML 转换引擎就绪 (新引擎可用)")
+        except ImportError as e:
+            print(f"⚠️  SVG 引擎不可用: {e}")
+            print("   将使用旧版 python-pptx 引擎作为后备")
+            
+    except Exception as e:
+        print(f"❌ PPT 引擎加载失败: {e}")
+    
+    # 检查数据库
+    try:
+        from session_db import _get_conn
+        conn = _get_conn()
+        conn.execute("SELECT count(*) FROM sessions")
+        print("✅ 数据库连接正常")
+        conn.close()
+    except Exception as e:
+        print(f"❌ 数据库连接失败: {e}")
+    
+    print("\n✅ 系统启动完成!\n")
 
 
 class ChatRequest(BaseModel):

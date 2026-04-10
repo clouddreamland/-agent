@@ -8,16 +8,15 @@ from sentence_transformers import SentenceTransformer
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
 
-BGE_MODEL_PATH = os.path.join(
-    PROJECT_ROOT, 
-    "models--BAAI--bge-small-zh-v1.5", 
-    "snapshots", 
-    "7999e1d3359715c523056ef9478215996d62a620"
-)
-CHROMA_DB_PATH = os.path.join(CURRENT_DIR, "chroma_db")
-COLLECTION_NAME = "textbook_knowledge"
+MODELS_DIR = os.path.join(PROJECT_ROOT, "models")
+BGE_MODEL_NAME = "BAAI/bge-small-zh-v1.5"
 
-print("⏳ 正在加载 BGE 向量模型（本地路径，不联网）...")
+# 优先级：1. 本地硬路径（你现有的图标位置） 2. 项目内 models 文件夹 3. 自动下载
+BGE_MODEL_PATH = os.path.join(PROJECT_ROOT, "models--BAAI--bge-small-zh-v1.5")
+if not os.path.exists(BGE_MODEL_PATH):
+    BGE_MODEL_PATH = BGE_MODEL_NAME
+
+print(f"⏳ 正在加载 BGE 向量模型 ({BGE_MODEL_NAME})...")
 _embedding_model = None
 _client = None
 _collection = None
@@ -26,7 +25,8 @@ _collection = None
 def _get_embedding_model():
     global _embedding_model
     if _embedding_model is None:
-        _embedding_model = SentenceTransformer(BGE_MODEL_PATH)
+        # 显式指定项目内的 models 文件夹作为下载缓存，防止存入 C 盘
+        _embedding_model = SentenceTransformer(BGE_MODEL_PATH, cache_folder=MODELS_DIR)
         print(f"✅ BGE 模型加载完毕: {BGE_MODEL_PATH}")
     return _embedding_model
 
@@ -34,6 +34,10 @@ def _get_embedding_model():
 def _get_collection():
     global _client, _collection
     if _collection is None:
+        # 确保 ChromaDB 的存储目录也存在
+        if not os.path.exists(CHROMA_DB_PATH):
+            os.makedirs(CHROMA_DB_PATH, exist_ok=True)
+            
         _client = chromadb.PersistentClient(path=CHROMA_DB_PATH)
         _collection = _client.get_or_create_collection(
             name=COLLECTION_NAME,

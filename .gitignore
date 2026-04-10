@@ -1,6 +1,7 @@
-# AI Model directories (Very large files)
+# AI Model and large project directories
 models--BAAI--bge-small-zh-v1.5/
 models--Qwen--Qwen2.5-0.5B-Instruct/
+ppt-master-main/
 
 # Python junk
 __pycache__/
