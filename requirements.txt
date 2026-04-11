@@ -1,0 +1,28 @@
+# AI 教学智能体 - Python 依赖
+# pip install -r requirements.txt
+
+# --- Web 框架 ---
+fastapi
+uvicorn
+python-multipart
+pydantic
+
+# --- LLM API ---
+openai
+dashscope
+google-genai
+
+# --- RAG 知识库 ---
+chromadb
+sentence-transformers
+
+# --- PPT 生成 & 导出 ---
+python-pptx
+Pillow
+
+# --- 文档解析 (上传参考资料) ---
+python-docx
+PyMuPDF
+
+# --- HTTP ---
+requests

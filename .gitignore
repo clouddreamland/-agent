@@ -1,24 +1,116 @@
-# AI Model and large project directories
-models--BAAI--bge-small-zh-v1.5/
-models--Qwen--Qwen2.5-0.5B-Instruct/
-ppt-master-main/
+# =============================================
+# AI 教学智能体 - .gitignore
+# 原则: 只保留"别人克隆下来能直接跑"所需的文件
+# =============================================
 
-# Python junk
+# ---------- Python 通用垃圾 ----------
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyo
 venv/
 .env
+.pytest_cache/
 
-# Editor settings
+# ---------- 编辑器/IDE ----------
 .idea/
 .vscode/
 .trae/
+.gemini/
 
-# Output folders
+# ---------- 未使用的本地大模型 ----------
+# Qwen 0.5B 本地模型 (当前代码用 DeepSeek API, 此模型未被 import)
+models--Qwen--Qwen2.5-0.5B-Instruct/
+# HuggingFace 下载缓存
+models/
+
+# ---------- 运行时生成的本地数据 ----------
+backend_python/chat_history.db
+backend_python/chroma_db/
+backend_python/debug.txt
+backend_python/debug.py
+
+# ---------- 运行时生成的图片/PPT ----------
+backend_python/images/
+images/
 ppts/
+*.pptx
+*.pdf
 
-# OS files
+# ---------- backend_python 中未被引用的旧文件 ----------
+# ppt_engine.py (v1) 已被 ppt_engine_v2.py 完全替代, 无任何 import
+backend_python/ppt_engine.py
+# fix_quotes.py 无任何 import
+backend_python/fix_quotes.py
+# test 脚本 (开发调试用, 不影响运行)
+backend_python/test_bridge.py
+backend_python/test_ppt_engine.py
+backend_python/test_ppt_master_v3.pptx
+
+# ---------- ppt-master-main 中未被代码调用的部分 ----------
+# 以下是 ppt-master-main 仓库自带的文档/示例/CI, 与本项目运行无关
+ppt-master-main/.github/
+ppt-master-main/.gitignore
+ppt-master-main/.env.example
+ppt-master-main/AGENTS.md
+ppt-master-main/CLAUDE.md
+ppt-master-main/CODE_OF_CONDUCT.md
+ppt-master-main/CONTRIBUTING.md
+ppt-master-main/LICENSE
+ppt-master-main/README.md
+ppt-master-main/README_CN.md
+ppt-master-main/SECURITY.md
+ppt-master-main/index.html
+ppt-master-main/viewer.html
+ppt-master-main/requirements.txt
+ppt-master-main/docs/
+ppt-master-main/projects/
+# examples/ 全是演示项目(每个含大量 SVG/图片), 运行不需要
+ppt-master-main/examples/
+
+# ppt-master scripts 中未被 bridge 调用的工具脚本
+ppt-master-main/skills/ppt-master/scripts/analyze_images.py
+ppt-master-main/skills/ppt-master/scripts/batch_validate.py
+ppt-master-main/skills/ppt-master/scripts/doc_to_md.py
+ppt-master-main/skills/ppt-master/scripts/error_helper.py
+ppt-master-main/skills/ppt-master/scripts/gemini_watermark_remover.py
+ppt-master-main/skills/ppt-master/scripts/generate_examples_index.py
+ppt-master-main/skills/ppt-master/scripts/pdf_to_md.py
+ppt-master-main/skills/ppt-master/scripts/pptx_animations.py
+ppt-master-main/skills/ppt-master/scripts/pptx_template_import.py
+ppt-master-main/skills/ppt-master/scripts/project_manager.py
+ppt-master-main/skills/ppt-master/scripts/project_utils.py
+ppt-master-main/skills/ppt-master/scripts/rotate_images.py
+ppt-master-main/skills/ppt-master/scripts/svg_position_calculator.py
+ppt-master-main/skills/ppt-master/scripts/svg_quality_checker.py
+ppt-master-main/skills/ppt-master/scripts/total_md_split.py
+ppt-master-main/skills/ppt-master/scripts/update_repo.py
+ppt-master-main/skills/ppt-master/scripts/web_to_md.py
+ppt-master-main/skills/ppt-master/scripts/web_to_md.cjs
+ppt-master-main/skills/ppt-master/scripts/README.md
+ppt-master-main/skills/ppt-master/scripts/docs/
+ppt-master-main/skills/ppt-master/scripts/assets/
+# image_gen + image_backends 已复制到 backend_python/, ppt-master 内的是冗余副本
+ppt-master-main/skills/ppt-master/scripts/image_gen.py
+ppt-master-main/skills/ppt-master/scripts/image_backends/
+
+# ppt-master templates 中未被代码引用的部分
+ppt-master-main/skills/ppt-master/templates/charts/
+ppt-master-main/skills/ppt-master/templates/layouts/
+# tabler-filled 和 tabler-outline 图标集 (代码只用 chunk/)
+ppt-master-main/skills/ppt-master/templates/icons/tabler-filled/
+ppt-master-main/skills/ppt-master/templates/icons/tabler-outline/
+
+# ppt-master references 和 workflows (文档, 不影响运行)
+ppt-master-main/skills/ppt-master/references/
+ppt-master-main/skills/ppt-master/workflows/
+ppt-master-main/skills/ppt-master/SKILL.md
+
+# ---------- 日志和临时文件 ----------
+*.log
+*.tmp
+
+# ---------- OS 文件 ----------
 Thumbs.db
 Desktop.ini
 .DS_Store
