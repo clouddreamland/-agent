@@ -7,7 +7,10 @@ PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
 os.environ["HF_HOME"] = os.path.join(PROJECT_ROOT, "models")
 
 import uvicorn
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File
+import fitz
+import docx
+import io
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
@@ -191,6 +194,42 @@ async def get_session_slides(session_id: str):
 # ==========================================
 # 知识库 & 文件下载 & 健康检查
 # ==========================================
+
+@app.post("/upload_reference")
+async def upload_reference(file: UploadFile = File(...)):
+    """处理上传的多模态参考资料(PDF/Word)，提取文字并存入知识库"""
+    from knowledge_base import add_to_kb
+    try:
+        content = await file.read()
+        filename = file.filename.lower()
+        extracted_text = ""
+        
+        if filename.endswith(".pdf"):
+            pdf_document = fitz.open(stream=content, filetype="pdf")
+            for page in pdf_document:
+                extracted_text += page.get_text() + "\n"
+        elif filename.endswith(".docx"):
+            doc = docx.Document(io.BytesIO(content))
+            extracted_text = "\n".join([paragraph.text for paragraph in doc.paragraphs])
+        else:
+            raise HTTPException(status_code=400, detail="不支持的文件格式，请上传 PDF 或 Word (.docx)")
+            
+        if not extracted_text.strip():
+            return {"status": "success", "message": "文件中未提取到文字内容", "kb_count": 0}
+            
+        # 简单分段，防止单条过大导致 embedding 失败（这里按 1000 字符分块）
+        chunk_size = 1000
+        chunks = [extracted_text[i:i+chunk_size] for i in range(0, len(extracted_text), chunk_size)]
+        
+        # 将文档名字拼在段落前，让检索更准确
+        chunks = [f"参考文件《{file.filename}》内容片段:\n{c}" for c in chunks]
+        
+        count = add_to_kb(chunks)
+        return {"status": "success", "message": f"成功读取《{file.filename}》，共解析 {len(extracted_text)} 字，已加入背景知识，你现在可以围绕该资料进行交流和生成了。"}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"文件解析失败: {str(e)}")
+
 
 @app.post("/kb/init")
 async def init_knowledge_base(req: KbInitRequest):

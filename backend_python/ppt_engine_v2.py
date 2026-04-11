@@ -191,46 +191,53 @@ class SlideDesigner:
         
         parts += [
             "",
-            "<!-- 封面顶部渐变区域 -->",
-            "<rect x=\"0\" y=\"0\" width=\"{}\" height=\"320\" fill=\"url(#primaryGrad)\"/>".format(W),
-            "<polygon points=\"0,320 {},280 {},320\" fill=\"{}\"/>".format(W, W, bg),
+            "<!-- 封面背景大动态倾斜渐变 -->",
+            "<rect x=\"0\" y=\"0\" width=\"{0}\" height=\"{1}\" fill=\"url(#primaryGrad)\"/>".format(W, H),
+            "<path d=\"M0,720 L0,550 L{0},250 L{0},720 Z\" fill=\"{1}\"/>".format(W, bg),
+            "<path d=\"M0,550 L0,530 L{0},230 L{0},250 Z\" fill=\"{1}\" opacity=\"0.6\"/>".format(W, p),
             "",
-            "<!-- 装饰性同心圆 -->",
-            "<circle cx=\"1050\" cy=\"140\" r=\"256\" fill=\"{}\" fill-opacity=\"0.022\"/>".format(tw),
-            "<circle cx=\"1050\" cy=\"140\" r=\"170\" fill=\"{}\" fill-opacity=\"0.028\"/>".format(tw),
-            "<circle cx=\"1050\" cy=\"140\" r=\"96\" fill=\"{}\" fill-opacity=\"0.038\"/>".format(tw),
-            "<circle cx=\"1050\" cy=\"140\" r=\"40\" fill=\"{}\" fill-opacity=\"0.050\"/>".format(tw),
+            "<!-- 装饰性同心圆与网格 -->",
+            "<circle cx=\"950\" cy=\"200\" r=\"350\" fill=\"{0}\" fill-opacity=\"0.015\"/>".format(tw),
+            "<circle cx=\"950\" cy=\"200\" r=\"260\" fill=\"{0}\" fill-opacity=\"0.025\"/>".format(tw),
+            "<circle cx=\"950\" cy=\"200\" r=\"160\" fill=\"{0}\" fill-opacity=\"0.035\"/>".format(tw),
+            "<circle cx=\"950\" cy=\"200\" r=\"80\" fill=\"{0}\" fill-opacity=\"0.05\"/>".format(tw),
             "",
             "<!-- 副标题标签 -->",
-            "<text x=\"80\" y=\"52\" font-family=\"Arial, sans-serif\" font-size=\"11\" fill=\"{}\" fill-opacity=\"0.58\" letter-spacing=\"3\">TEACHING AGENT  ·  AI POWERED</text>".format(tw),
-            "<line x1=\"80\" y1=\"63\" x2=\"480\" y2=\"63\" stroke=\"{}\" stroke-width=\"0.5\" stroke-opacity=\"0.20\"/>".format(tw),
+            "<rect x=\"80\" y=\"110\" width=\"240\" height=\"28\" rx=\"14\" fill=\"{0}\" fill-opacity=\"0.15\"/>".format(tw),
+            "<text x=\"100\" y=\"129\" font-family=\"Arial, sans-serif\" font-size=\"11\" font-weight=\"bold\" fill=\"{0}\" letter-spacing=\"2\">AI POWERED · PROFESSIONAL</text>".format(tw),
             "",
             "<!-- 主标题 -->",
-            "<text font-weight=\"bold\" font-family=\"Microsoft YaHei, Arial\" fill=\"{}\" font-size=\"48\" x=\"80\" y=\"150\">{}</text>".format(tw, self._escape_xml(topic)),
-            "<rect x=\"80\" y=\"168\" width=\"60\" height=\"4\" rx=\"2\" fill=\"url(#accentGrad)\"/>",
+            "<text font-weight=\"bold\" font-family=\"Microsoft YaHei, Arial\" fill=\"{0}\" font-size=\"64\" x=\"80\" y=\"220\" filter=\"drop-shadow(2px 4px 6px rgba(0,0,0,0.2))\">{1}</text>".format(tw, self._escape_xml(topic)),
+            "<rect x=\"80\" y=\"250\" width=\"120\" height=\"6\" rx=\"3\" fill=\"url(#accentGrad)\"/>",
             "",
             "<!-- 副标题 -->",
-            "<text x=\"80\" y=\"210\" font-family=\"Microsoft YaHei, Arial\" font-size=\"18\" fill=\"{}\" fill-opacity=\"0.78\">{}</text>".format(tw, self._escape_xml(key_points[0] if key_points else "Professional Presentation")),
+            "<text x=\"80\" y=\"310\" font-family=\"Microsoft YaHei, Arial\" font-size=\"22\" fill=\"{0}\" fill-opacity=\"0.9\" font-weight=\"300\">{1}</text>".format(tw, self._escape_xml(key_points[0] if key_points else "Premium Presentation Layout")),
         ]
         
         # 加入封面图标（如果指定）
         if assigned_icon:
-            icon_svg = self._load_icon(assigned_icon, 140, tw)
+            icon_svg = self._load_icon(assigned_icon, 200, tw)
             if icon_svg:
-                parts.append("<g transform=\"translate(1000,100)\" opacity=\"0.15\">{}</g>".format(icon_svg))
+                parts.append("<g transform=\"translate(900,100)\" opacity=\"0.12\">{}</g>".format(icon_svg))
 
         
         if len(key_points) > 1:
             parts += [
                 "",
-                "<!-- 要点卡片区域 -->",
-                "<text x=\"80\" y=\"360\" font-family=\"Arial, sans-serif\" font-size=\"11\" fill=\"{}\" letter-spacing=\"2\">KEY HIGHLIGHTS</text>".format(tm),
-                "<line x1=\"80\" y1=\"371\" x2=\"600\" y2=\"371\" stroke=\"{}\" stroke-width=\"1\"/>".format(br),
-                "<rect x=\"80\" y=\"384\" width=\"4\" height=\"120\" rx=\"2\" fill=\"{}\"/>".format(p)
+                "<!-- 要点卡片区域（浮动卡片式） -->",
+                "<text x=\"80\" y=\"460\" font-family=\"Arial, sans-serif\" font-size=\"12\" font-weight=\"bold\" fill=\"{0}\" letter-spacing=\"2\">KEY HIGHLIGHTS</text>".format(tt if tp_light() else tm),
+                "<line x1=\"80\" y1=\"475\" x2=\"1200\" y2=\"475\" stroke=\"{0}\" stroke-width=\"1\" stroke-opacity=\"0.5\"/>".format(br),
             ]
             for i, point in enumerate(key_points[1:4], 1):
-                y_base = 395 + (i-1) * 35
-                parts.append("<text x=\"100\" y=\"{}\" font-family=\"Microsoft YaHei, Arial\" font-size=\"13\" fill=\"{}\" font-weight=\"bold\">{}. {}</text>".format(y_base, tt, i, self._escape_xml(point[:40])))
+                x_base = 80 + (i-1) * 360
+                y_base = 500
+                parts.append("<rect x=\"{0}\" y=\"{1}\" width=\"330\" height=\"90\" rx=\"8\" fill=\"{2}\" fill-opacity=\"0.8\" filter=\"url(#cardShadow)\"/>".format(x_base, y_base, sf))
+                parts.append("<rect x=\"{0}\" y=\"{1}\" width=\"4\" height=\"40\" rx=\"2\" fill=\"{2}\"/>".format(x_base + 16, y_base + 25, p))
+                parts.append("<text x=\"{0}\" y=\"{1}\" font-family=\"Arial, sans-serif\" font-size=\"24\" font-weight=\"bold\" fill=\"{2}\" fill-opacity=\"0.2\">0{3}</text>".format(x_base + 28, y_base + 55, p, i))
+                
+                wrapped = self._wrap_text(point, max_chars=18)
+                for j, line in enumerate(wrapped[:2]):
+                    parts.append("<text x=\"{0}\" y=\"{1}\" font-family=\"Microsoft YaHei, Arial\" font-size=\"15\" font-weight=\"bold\" fill=\"{2}\">{3}</text>".format(x_base + 70, y_base + 42 + j*22, tt, self._escape_xml(line)))
         
         parts += self._build_footer(slide_num, total_slides)
         parts.append("</svg>")
@@ -285,22 +292,26 @@ class SlideDesigner:
         parts = [
             "",
             "<!-- 内容卡片 {} -->".format(index),
-            "<rect x=\"{}\" y=\"{}\" width=\"{}\" height=\"{}\" rx=\"4\" fill=\"{}\" filter=\"url(#cardShadow)\"/>".format(x, y, w, h, bg),
-            "<rect x=\"{}\" y=\"{}\" width=\"{}\" height=\"42\" rx=\"4\" fill=\"{}\"/>".format(x, y, w, pd),
-            "<rect x=\"{}\" y=\"{}\" width=\"{}\" height=\"12\" rx=\"0\" fill=\"{}\"/>".format(x, y + 34, w, pd),
-            "<text x=\"{}\" y=\"{}\" font-family=\"Arial, sans-serif\" font-size=\"18\" font-weight=\"bold\" fill=\"{}\" text-anchor=\"middle\">{:02d}</text>".format(x + w // 2, y + 27, tw, index),
+            "<rect x=\"{0}\" y=\"{1}\" width=\"{2}\" height=\"{3}\" rx=\"12\" fill=\"{4}\" filter=\"url(#cardShadow)\"/>".format(x, y, w, h, sf),
+            "<rect x=\"{0}\" y=\"{1}\" width=\"8\" height=\"{2}\" rx=\"4\" fill=\"url(#primaryGrad)\"/>".format(x, y, h),
+            "<text x=\"{0}\" y=\"{1}\" font-family=\"Arial, sans-serif\" font-size=\"80\" font-weight=\"bold\" fill=\"{2}\" fill-opacity=\"0.05\" text-anchor=\"end\">{3:02d}</text>".format(x + w - 20, y + h - 15, pd, index),
         ]
         
-        icon_svg = self._load_icon(icon_name, 24, p)
+        icon_svg = self._load_icon(icon_name, 40, p)
         if icon_svg:
-            icon_x = x + 20
-            icon_y = y + 54
+            icon_x = x + 30
+            icon_y = y + (h - 40) // 2
             parts.append("<g transform=\"translate({},{})\">{}</g>".format(icon_x, icon_y, icon_svg))
         
-        wrapped = self._wrap_text(text, max_chars=55)
-        text_x = x + (60 if icon_svg else 20)
+        wrapped = self._wrap_text(text, max_chars=60)
+        text_x = x + (100 if icon_svg else 40)
+        
+        line_height = 28
+        total_text_height = len(wrapped[:2]) * line_height
+        start_y = y + (h - total_text_height) // 2 + 20
+        
         for j, line in enumerate(wrapped[:2]):
-            parts.append("<text x=\"{}\" y=\"{}\" font-family=\"Microsoft YaHei, Arial\" font-size=\"14\" fill=\"{}\">{}</text>".format(text_x, y + 62 + j * 24, tb, self._escape_xml(line)))
+            parts.append("<text x=\"{0}\" y=\"{1}\" font-family=\"Microsoft YaHei, Arial\" font-size=\"18\" font-weight=\"bold\" fill=\"{2}\">{3}</text>".format(text_x, start_y + j * line_height, tb, self._escape_xml(line)))
         
         return parts
     
@@ -382,7 +393,7 @@ class SlideDesigner:
             "<!-- 页面标题 -->"
         ]
         
-        icon_svg = self._load_icon(assigned_icon, 32, 32, tt) if assigned_icon else None
+        icon_svg = self._load_icon(assigned_icon, 32, tt) if assigned_icon else None
         if icon_svg:
             parts.append("<g transform=\"translate(40,21)\">{}</g>".format(icon_svg))
             parts.append("<text x=\"80\" y=\"44\" font-family=\"Microsoft YaHei, Arial\" font-size=\"19\" font-weight=\"bold\" fill=\"{}\">{}</text>".format(tt, self._escape_xml(topic)))

@@ -591,6 +591,10 @@
             </div>
 
             <div class="input-area">
+                <input type="file" id="file-upload" accept=".pdf,.doc,.docx" style="display: none;" onchange="handleFileUpload(event)">
+                <button class="action-btn" id="upload-btn" onclick="document.getElementById('file-upload').click()" title="上传参考资料(PDF/Word)" style="font-size: 18px; padding: 0 12px; border:none; background:transparent;">
+                    📎
+                </button>
                 <textarea id="user-input" placeholder="输入消息，按回车发送..." rows="1"></textarea>
                 <button class="send-btn" id="send-btn" onclick="sendMessage()">➤</button>
             </div>
@@ -1016,6 +1020,40 @@
             sendMessage();
         }
 
+        async function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            addMessage(`📎 上传参考资料: ${file.name}`, true);
+            setLoading(true);
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const res = await fetch(`${API_BASE}/upload_reference`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                
+                if (data.status === "success") {
+                    addMessage(`✅ ${data.message}`, false);
+                    setLoading(false);
+                    // 通知大模型
+                    sendQuickMessage(`我刚才上传了一份参考资料《${file.name}》，请在接下来的对话和课件生成中作为背景知识参考。如果内容足够，你可以直接根据它帮我生成一份课件大纲。`);
+                } else {
+                    addMessage(`❌ 解析失败: ${data.detail || '未知错误'}`, false);
+                    setLoading(false);
+                }
+            } catch (err) {
+                addMessage(`❌ 上传出错: ${err}`, false);
+                setLoading(false);
+            } finally {
+                event.target.value = '';
+            }
+        }
+
         // ========== 预览面板功能 ==========
 
         function updatePreviewPanel(data) {
@@ -1029,7 +1067,7 @@
             if (fullData) {
                 // 提取 slides 数组
                 const slides = Array.isArray(fullData) ? fullData : (fullData.slides || []);
-                const colorScheme = Array.isArray(fullData) ? "mckinsey_blue" : (fullData.color_scheme || "mckinsey_blue");
+                const colorScheme = Array.isArray(fullData) ? "classic_shanshui" : (fullData.color_scheme || "classic_shanshui");
                 
                 if (slides.length > 0) {
                     emptyState.style.display = "none";
