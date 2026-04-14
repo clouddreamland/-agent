@@ -15,6 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Optional
+from openai import OpenAI as SiliconFlowClient
 
 from llm_api import chat_with_agent
 from session_db import (
@@ -25,6 +26,15 @@ from session_db import (
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
 DOWNLOAD_DIR = os.path.join(PROJECT_ROOT, "ppts")
+
+# ==========================================
+# 硅基流动语音识别 (SenseVoiceSmall) 客户端
+# ==========================================
+SILICON_FLOW_KEY = "sk-brcjhomlsadpzhvjniddxmeqeylryxfqfsauqjkddrezmogu"
+silicon_client = SiliconFlowClient(
+    api_key=SILICON_FLOW_KEY,
+    base_url="https://api.siliconflow.cn/v1"
+)
 
 app = FastAPI(title="AI 互动式教学智能体后端中枢")
 
@@ -256,6 +266,58 @@ async def download_file(filename: str):
     )
 
 
+# ==========================================
+# 语音识别接口（硅基流动 SenseVoiceSmall）
+# ==========================================
+@app.post("/api/transcribe")
+async def transcribe_audio(audio: UploadFile = File(...)):
+    """接收前端录音文件，调用硅基流动 SenseVoiceSmall 进行语音转文字"""
+    temp_file = f"temp_{audio.filename}"
+
+    # 1. 把前端发来的音频临时存到本地
+    with open(temp_file, "wb") as buffer:
+        buffer.write(await audio.read())
+
+    try:
+        # 2. 调用硅基流动的语音识别 API
+        with open(temp_file, "rb") as audio_data:
+            result = silicon_client.audio.transcriptions.create(
+                model="FunAudioLLM/SenseVoiceSmall",
+                file=audio_data,
+                response_format="text"
+            )
+
+        print(f"  [语音识别] API原始返回: {result}")
+
+        # 3. 解析识别结果（硅基流动可能返回 JSON 字符串而非纯文本）
+        recognized_text = result
+        if isinstance(result, str):
+            # 尝试解析 JSON 格式的返回值，如 '{"text":"你好"}'
+            try:
+                parsed = json.loads(result)
+                if isinstance(parsed, dict) and "text" in parsed:
+                    recognized_text = parsed["text"]
+            except (json.JSONDecodeError, TypeError):
+                # 不是 JSON，直接当纯文本用
+                recognized_text = result
+        elif hasattr(result, 'text'):
+            # 如果是对象类型，取 .text 属性
+            recognized_text = result.text
+
+        recognized_text = recognized_text.strip() if recognized_text else ""
+        print(f"  [语音识别] 最终文本: {recognized_text}")
+        return {"status": "success", "text": recognized_text}
+
+    except Exception as e:
+        print(f"  [语音识别] API调用失败: {e}")
+        return {"status": "error", "text": f"语音识别失败: {str(e)}"}
+
+    finally:
+        # 3. 删除临时音频文件
+        if os.path.exists(temp_file):
+            os.remove(temp_file)
+
+
 @app.get("/health")
 async def health_check():
     return {"status": "ok", "service": "AI Teaching Agent"}
@@ -269,6 +331,7 @@ if __name__ == "__main__":
     print(f"  💬 聊天接口: POST /chat")
     print(f"  📂 会话管理: GET/POST /sessions")
     print(f"  📚 知识库接口: POST /kb/init")
+    print(f"  🎙️ 语音识别: POST /api/transcribe")
     print(f"  📥 文件下载: GET /downloads/<filename>")
     print(f"  📂 下载目录: {DOWNLOAD_DIR}")
     print("=" * 60)

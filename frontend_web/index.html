@@ -342,6 +342,8 @@
         .status-generated { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
         .status-modified { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
         .status-exported { background: rgba(99,102,241,0.15); color: #818cf8; border: 1px solid rgba(99,102,241,0.2); }
+        .status-lesson-plan { background: rgba(220,38,38,0.15); color: #f87171; border: 1px solid rgba(220,38,38,0.25); }
+        .status-html5 { background: rgba(37,99,235,0.15); color: #60a5fa; border: 1px solid rgba(37,99,235,0.25); }
 
         .preview-body {
             flex: 1;
@@ -528,6 +530,283 @@
             border: 1px solid rgba(255,255,255,0.04);
         }
 
+        /* === Word 教案生成按钮 === */
+        .lesson-plan-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 14px;
+            height: 42px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.25s;
+            box-shadow: 0 2px 12px rgba(220,38,38,0.3);
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        .lesson-plan-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 18px rgba(220,38,38,0.45);
+        }
+        .lesson-plan-btn:active {
+            transform: scale(0.97);
+        }
+        .lesson-plan-btn .lp-icon {
+            width: 22px; height: 22px;
+            background: white;
+            border-radius: 4px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 12px; color: #dc2626;
+            line-height: 1;
+        }
+
+        /* 教案主题输入弹窗 */
+        .lp-modal-overlay {
+            display: none; position: fixed; top: 0; left: 0;
+            right: 0; bottom: 0; background: rgba(0,0,0,0.55);
+            z-index: 200; align-items: center; justify-content: center;
+            backdrop-filter: blur(6px);
+        }
+        .lp-modal-overlay.active { display: flex; }
+        .lp-modal {
+            background: #1e1e38;
+            border-radius: 18px;
+            width: 460px;
+            padding: 28px 32px;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.08);
+            animation: modalSlideUp 0.3s ease;
+        }
+        @keyframes modalSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .lp-modal-header {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 20px;
+        }
+        .lp-modal-header .lp-modal-icon {
+            width: 36px; height: 36px; border-radius: 10px;
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 16px; color: white;
+        }
+        .lp-modal-header h3 {
+            font-size: 17px; font-weight: 700; color: #e0e0e0;
+        }
+        .lp-modal-desc {
+            font-size: 13px; color: #888; margin-bottom: 18px; line-height: 1.6;
+        }
+        .lp-modal-input {
+            width: 100%; padding: 12px 16px; border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: #14142a; color: #e0e0e0;
+            font-size: 14px; font-family: inherit; outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            margin-bottom: 20px;
+        }
+        .lp-modal-input:focus {
+            border-color: rgba(220,38,38,0.5);
+            box-shadow: 0 0 0 3px rgba(220,38,38,0.12);
+        }
+        .lp-modal-input::placeholder { color: #555; }
+        .lp-modal-actions {
+            display: flex; gap: 10px; justify-content: flex-end;
+        }
+        .lp-modal-actions button {
+            padding: 10px 22px; border-radius: 10px;
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            font-family: inherit; border: none; transition: all 0.2s;
+        }
+        .lp-cancel-btn {
+            background: rgba(255,255,255,0.06); color: #aaa;
+        }
+        .lp-cancel-btn:hover { background: rgba(255,255,255,0.1); }
+        .lp-confirm-btn {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+            box-shadow: 0 2px 12px rgba(220,38,38,0.3);
+        }
+        .lp-confirm-btn:hover { opacity: 0.9; }
+
+        /* === HTML5 互动小游戏按钮 === */
+        .game-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 14px;
+            height: 42px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.25s;
+            box-shadow: 0 2px 12px rgba(37,99,235,0.3);
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        .game-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 18px rgba(37,99,235,0.45);
+        }
+        .game-btn:active {
+            transform: scale(0.97);
+        }
+        .game-btn .game-icon {
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        /* 游戏主题输入弹窗 */
+        .game-modal-overlay {
+            display: none; position: fixed; top: 0; left: 0;
+            right: 0; bottom: 0; background: rgba(0,0,0,0.55);
+            z-index: 200; align-items: center; justify-content: center;
+            backdrop-filter: blur(6px);
+        }
+        .game-modal-overlay.active { display: flex; }
+        .game-modal {
+            background: #1e1e38;
+            border-radius: 18px;
+            width: 460px;
+            padding: 28px 32px;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.08);
+            animation: modalSlideUp 0.3s ease;
+        }
+        .game-modal-header {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 20px;
+        }
+        .game-modal-header .game-modal-icon {
+            width: 36px; height: 36px; border-radius: 10px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; color: white;
+        }
+        .game-modal-header h3 {
+            font-size: 17px; font-weight: 700; color: #e0e0e0;
+        }
+        .game-modal-desc {
+            font-size: 13px; color: #888; margin-bottom: 18px; line-height: 1.6;
+        }
+        .game-modal-input {
+            width: 100%; padding: 12px 16px; border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: #14142a; color: #e0e0e0;
+            font-size: 14px; font-family: inherit; outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            margin-bottom: 20px;
+        }
+        .game-modal-input:focus {
+            border-color: rgba(37,99,235,0.5);
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+        }
+        .game-modal-input::placeholder { color: #555; }
+        .game-modal-actions {
+            display: flex; gap: 10px; justify-content: flex-end;
+        }
+        .game-modal-actions button {
+            padding: 10px 22px; border-radius: 10px;
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            font-family: inherit; border: none; transition: all 0.2s;
+        }
+        .game-cancel-btn {
+            background: rgba(255,255,255,0.06); color: #aaa;
+        }
+        .game-cancel-btn:hover { background: rgba(255,255,255,0.1); }
+        .game-confirm-btn {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            box-shadow: 0 2px 12px rgba(37,99,235,0.3);
+        }
+        .game-confirm-btn:hover { opacity: 0.9; }
+
+        /* === 麦克风录音按钮 === */
+        .mic-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.04);
+            color: #aaa;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .mic-btn:hover {
+            border-color: rgba(239,68,68,0.4);
+            color: #f87171;
+            background: rgba(239,68,68,0.08);
+        }
+        .mic-btn.recording {
+            border-color: #ef4444;
+            color: #fff;
+            background: #ef4444;
+            animation: micPulse 1.2s ease-in-out infinite;
+            box-shadow: 0 0 0 0 rgba(239,68,68,0.5);
+        }
+        @keyframes micPulse {
+            0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.5); }
+            70% { box-shadow: 0 0 0 12px rgba(239,68,68,0); }
+            100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+        }
+        .mic-btn.recording::after {
+            content: '';
+            position: absolute;
+            width: 54px; height: 54px;
+            border-radius: 50%;
+            border: 2px solid rgba(239,68,68,0.3);
+            animation: micRipple 1.5s ease-out infinite;
+        }
+        @keyframes micRipple {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+        /* 录音时间提示 */
+        .mic-timer {
+            display: none;
+            position: absolute;
+            top: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ef4444;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 10px;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(239,68,68,0.4);
+        }
+        .mic-btn.recording .mic-timer {
+            display: block;
+        }
+        /* 识别中状态 */
+        .mic-btn.transcribing {
+            border-color: rgba(59,130,246,0.5);
+            color: #60a5fa;
+            background: rgba(59,130,246,0.1);
+            cursor: wait;
+            animation: none;
+        }
+        .mic-btn.transcribing::after { display: none; }
+
         /* 响应式 */
         @media (max-width: 1000px) {
             .sidebar { width: 200px; }
@@ -577,6 +856,8 @@
                         你好！我是 AI 教学助手 🎓<br><br>
                         我可以帮你：<br>
                         📝 <b>生成 PPT 课件</b> — 告诉我主题和页数<br>
+                        📄 <b>生成 Word 教案</b> — 点击左下角红色按钮一键生成<br>
+                        🎮 <b>生成互动小游戏</b> — 点击蓝色按钮或直接说“帮我做个xxx小游戏”<br>
                         ✏️ <b>修改已有课件</b> — 提出修改意见<br>
                         💾 <b>导出下载文件</b> — 确认后导出<br>
                         📚 <b>查询知识点</b> — 从教材检索答案<br><br>
@@ -595,7 +876,17 @@
                 <button class="action-btn" id="upload-btn" onclick="document.getElementById('file-upload').click()" title="上传参考资料(PDF/Word)" style="font-size: 18px; padding: 0 12px; border:none; background:transparent;">
                     📎
                 </button>
+                <button class="lesson-plan-btn" onclick="openLessonPlanModal()" title="生成Word教案文档">
+                    <span class="lp-icon">W</span> 教案生成
+                </button>
+                <button class="game-btn" onclick="openGameModal()" title="生成HTML5互动小游戏">
+                    <span class="game-icon">🎮</span> 互动游戏
+                </button>
                 <textarea id="user-input" placeholder="输入消息，按回车发送..." rows="1"></textarea>
+                <button class="mic-btn" id="mic-btn" onclick="toggleRecording()" title="语音输入">
+                    <span class="mic-timer" id="mic-timer">0:00</span>
+                    🎙️
+                </button>
                 <button class="send-btn" id="send-btn" onclick="sendMessage()">➤</button>
             </div>
         </div>
@@ -629,6 +920,44 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Word 教案主题输入弹窗 -->
+    <div class="lp-modal-overlay" id="lp-modal" onclick="if(event.target===this)closeLessonPlanModal()">
+        <div class="lp-modal">
+            <div class="lp-modal-header">
+                <div class="lp-modal-icon">W</div>
+                <h3>Word 教案生成</h3>
+            </div>
+            <div class="lp-modal-desc">
+                根据教师指令要求，生成详细教案文档。<br>
+                教案包含：<b>教学目标、教学过程、教学方法、课堂活动设计、课后作业</b> 五大模块。
+            </div>
+            <input class="lp-modal-input" id="lp-topic-input" placeholder="请输入教案主题，例如：古诗词《望庐山瀑布》" autofocus>
+            <div class="lp-modal-actions">
+                <button class="lp-cancel-btn" onclick="closeLessonPlanModal()">取消</button>
+                <button class="lp-confirm-btn" onclick="submitLessonPlan()">✨ 生成教案</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HTML5 互动游戏主题输入弹窗 -->
+    <div class="game-modal-overlay" id="game-modal" onclick="if(event.target===this)closeGameModal()">
+        <div class="game-modal">
+            <div class="game-modal-header">
+                <div class="game-modal-icon">🎮</div>
+                <h3>HTML5 互动小游戏</h3>
+            </div>
+            <div class="game-modal-desc">
+                根据教学知识点，生成一个可在浏览器中直接运行的互动小游戏。<br>
+                支持的游戏形式：<b>知识问答、卡片记忆配对、拖拽分类、填空闯关、动画演示</b>等。
+            </div>
+            <input class="game-modal-input" id="game-topic-input" placeholder="请输入知识点主题，例如：九九乘法表、太阳系八大行星" autofocus>
+            <div class="game-modal-actions">
+                <button class="game-cancel-btn" onclick="closeGameModal()">取消</button>
+                <button class="game-confirm-btn" onclick="submitGame()">🎮 生成游戏</button>
+            </div>
+        </div>
     </div>
 
     <!-- JSON 查看器弹窗 -->
@@ -876,6 +1205,7 @@
                         你好！我是 AI 教学助手 🎓<br><br>
                         我可以帮你：<br>
                         📝 <b>生成 PPT 课件</b> — 告诉我主题和页数<br>
+                        🎮 <b>生成互动小游戏</b> — 直接说或点蓝色按钮<br>
                         ✏️ <b>修改已有课件</b> — 提出修改意见<br>
                         💾 <b>导出下载文件</b> — 确认后导出<br>
                         📚 <b>查询知识点</b> — 从教材检索答案<br><br>
@@ -1135,7 +1465,9 @@
                 idle: ["等待生成", "status-idle"],
                 generated: ["已生成 ✓", "status-generated"],
                 modified: ["已修改 ✓", "status-modified"],
-                exported: ["已导出 ✓", "status-exported"]
+                exported: ["已导出 ✓", "status-exported"],
+                lesson_plan_generated: ["教案已生成 ✓", "status-lesson-plan"],
+                html5_generated: ["游戏已生成 ✓", "status-html5"]
             };
             const [label, cls] = map[status] || map.idle;
             statusBadge.textContent = label;
@@ -1199,9 +1531,209 @@
             }
         }
 
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") toggleJsonModal(false);
+        // ========== Word 教案弹窗控制 ==========
+
+        function openLessonPlanModal() {
+            document.getElementById('lp-modal').classList.add('active');
+            const input = document.getElementById('lp-topic-input');
+            input.value = '';
+            setTimeout(() => input.focus(), 100);
+        }
+
+        function closeLessonPlanModal() {
+            document.getElementById('lp-modal').classList.remove('active');
+        }
+
+        function submitLessonPlan() {
+            const topic = document.getElementById('lp-topic-input').value.trim();
+            if (!topic) {
+                document.getElementById('lp-topic-input').style.borderColor = 'rgba(220,38,38,0.8)';
+                document.getElementById('lp-topic-input').setAttribute('placeholder', '⚠️ 请输入教案主题！');
+                return;
+            }
+            closeLessonPlanModal();
+            const prompt = `请帮我生成一份关于「${topic}」的详细教案文档，包含教学目标、教学过程、教学方法、课堂活动设计、课后作业。`;
+            userInput.value = prompt;
+            sendMessage();
+        }
+
+        // Enter 键快速提交教案弹窗
+        document.addEventListener('keydown', function(e) {
+            const lpModal = document.getElementById('lp-modal');
+            if (lpModal.classList.contains('active') && e.key === 'Enter') {
+                e.preventDefault();
+                submitLessonPlan();
+                return;
+            }
         });
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                toggleJsonModal(false);
+                closeLessonPlanModal();
+                closeGameModal();
+            }
+        });
+
+        // ========== HTML5 互动游戏弹窗控制 ==========
+
+        function openGameModal() {
+            document.getElementById('game-modal').classList.add('active');
+            const input = document.getElementById('game-topic-input');
+            input.value = '';
+            setTimeout(() => input.focus(), 100);
+        }
+
+        function closeGameModal() {
+            document.getElementById('game-modal').classList.remove('active');
+        }
+
+        function submitGame() {
+            const topic = document.getElementById('game-topic-input').value.trim();
+            if (!topic) {
+                document.getElementById('game-topic-input').style.borderColor = 'rgba(37,99,235,0.8)';
+                document.getElementById('game-topic-input').setAttribute('placeholder', '⚠️ 请输入知识点主题！');
+                return;
+            }
+            closeGameModal();
+            const prompt = `请帮我生成一个关于「${topic}」的趣味互动小游戏，要求美观、有动画效果、可以在浏览器中运行的 HTML5 互动内容。`;
+            userInput.value = prompt;
+            sendMessage();
+        }
+
+        // Enter 键快速提交游戏弹窗
+        document.addEventListener('keydown', function(e) {
+            const gameModal = document.getElementById('game-modal');
+            if (gameModal.classList.contains('active') && e.key === 'Enter') {
+                e.preventDefault();
+                submitGame();
+                return;
+            }
+        });
+
+        // ========== 🎙️ 语音录制控制系统 ==========
+
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let recordingStartTime = null;
+        let timerInterval = null;
+        const micBtn = document.getElementById('mic-btn');
+        const micTimer = document.getElementById('mic-timer');
+
+        function toggleRecording() {
+            if (micBtn.classList.contains('transcribing')) return; // 识别中不允许操作
+
+            if (micBtn.classList.contains('recording')) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        }
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+                audioChunks = [];
+                mediaRecorder = new MediaRecorder(stream, {
+                    mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/ogg'
+                });
+
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        audioChunks.push(event.data);
+                    }
+                };
+
+                mediaRecorder.onstop = () => {
+                    // 停止所有音轨
+                    stream.getTracks().forEach(track => track.stop());
+                    // 自动上传识别
+                    handleAudioUpload();
+                };
+
+                mediaRecorder.start();
+                micBtn.classList.add('recording');
+                micBtn.title = '点击停止录音';
+
+                // 启动计时器
+                recordingStartTime = Date.now();
+                micTimer.textContent = '0:00';
+                timerInterval = setInterval(updateTimer, 1000);
+
+                console.log('🎙️ 录音已开始');
+            } catch (err) {
+                console.error('麦克风权限被拒绝:', err);
+                addMessage('⚠️ 无法访问麦克风，请在浏览器地址栏左侧点击权限图标，允许使用麦克风后重试。', false);
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                micBtn.classList.remove('recording');
+                clearInterval(timerInterval);
+                console.log('🛑 录音已停止');
+            }
+        }
+
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            // 每次都重新获取 DOM 元素，防止 innerHTML 重写后引用丢失
+            const timer = document.getElementById('mic-timer');
+            if (timer) timer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        async function handleAudioUpload() {
+            if (audioChunks.length === 0) {
+                addMessage('⚠️ 未录制到音频内容', false);
+                return;
+            }
+
+            // 切换为"识别中"状态
+            micBtn.classList.add('transcribing');
+            micBtn.title = '语音识别中...';
+            micBtn.innerHTML = '<span class="mic-timer" id="mic-timer">识别中</span>⏳';
+
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'recording.webm');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/transcribe`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success' && data.text) {
+                    const recognizedText = data.text.trim();
+                    console.log('✅ 语音识别成功:', recognizedText);
+
+                    // 将识别的文字追加到输入框已有内容后面（而非覆盖）
+                    const existing = userInput.value.trim();
+                    userInput.value = existing ? (existing + recognizedText) : recognizedText;
+                    userInput.focus();
+
+                    // 自动调整输入框高度
+                    userInput.style.height = 'auto';
+                    userInput.style.height = userInput.scrollHeight + 'px';
+                } else {
+                    addMessage(`⚠️ 语音识别失败: ${data.text || '未知错误'}`, false);
+                }
+            } catch (err) {
+                console.error('语音识别请求失败:', err);
+                addMessage('⚠️ 语音识别服务暂时不可用，请检查网络连接', false);
+            } finally {
+                // 恢复按钮原样
+                micBtn.classList.remove('transcribing');
+                micBtn.title = '语音输入';
+                micBtn.innerHTML = '<span class="mic-timer" id="mic-timer">0:00</span>🎙️';
+            }
+        }
     </script>
 </body>
 </html>

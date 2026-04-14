@@ -54,6 +54,40 @@ TEACHING_TOOLS = [
     {
         "type": "function",
         "function": {
+            "name": "generate_word_lesson_plan",
+            "description": "【仅当用户明确要求生成教案、教学设计、教学方案或教案文档时才调用】。生成一份包含教学目标、教学过程、教学方法、课堂活动设计、课后作业五大模块的详细Word教案文档。注意：如果用户要求生成PPT/幻灯片，不要调用此工具，应调用generate_ppt。",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "topic": {
+                        "type": "string",
+                        "description": "教案的核心教学主题，例如：'望庐山瀑布' 或 '光合作用的过程'"
+                    }
+                },
+                "required": ["topic"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "generate_html5_interactive",
+            "description": "【当用户要求生成互动小游戏、动画创意、课堂互动活动、HTML5互动内容、趣味练习或知识闯关时调用】。生成一个可在浏览器中直接运行的HTML5单页互动小游戏或动画演示。注意：如果用户要求生成PPT则调用generate_ppt，不要调用此工具。",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "topic": {
+                        "type": "string",
+                        "description": "互动内容围绕的核心知识点或教学主题，例如：'九九乘法表' 或 '太阳系八大行星'"
+                    }
+                },
+                "required": ["topic"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "search_textbook",
             "description": "当学生询问具体的学术知识点时调用，用于从教材知识库中检索权威答案。",
             "parameters": {
