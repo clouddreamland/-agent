@@ -17,7 +17,7 @@ venv/
 .vscode/
 .trae/
 .gemini/
-
+.agents/
 # ---------- 未使用的本地大模型 ----------
 # Qwen 0.5B 本地模型 (当前代码用 DeepSeek API, 此模型未被 import)
 models--Qwen--Qwen2.5-0.5B-Instruct/
@@ -105,6 +105,9 @@ ppt-master-main/skills/ppt-master/templates/icons/tabler-outline/
 ppt-master-main/skills/ppt-master/references/
 ppt-master-main/skills/ppt-master/workflows/
 ppt-master-main/skills/ppt-master/SKILL.md
+
+# ---------- Antigravity / Gemini 本地数据 ----------
+.gemini/
 
 # ---------- 日志和临时文件 ----------
 *.log
