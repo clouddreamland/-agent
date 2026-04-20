@@ -11,10 +11,22 @@ PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
 MODELS_DIR = os.path.join(PROJECT_ROOT, "models")
 BGE_MODEL_NAME = "BAAI/bge-small-zh-v1.5"
 
-# 优先级：1. 本地硬路径（你现有的图标位置） 2. 项目内 models 文件夹 3. 自动下载
-BGE_MODEL_PATH = os.path.join(PROJECT_ROOT, "models--BAAI--bge-small-zh-v1.5")
-if not os.path.exists(BGE_MODEL_PATH):
+# 优先级：1. 本地缓存目录下的 snapshot  2. 自动下载
+_cache_dir = os.path.join(PROJECT_ROOT, "models--BAAI--bge-small-zh-v1.5")
+_snapshots_dir = os.path.join(_cache_dir, "snapshots")
+if os.path.isdir(_snapshots_dir):
+    # HuggingFace 缓存格式，取 snapshots 下第一个子目录
+    _subs = os.listdir(_snapshots_dir)
+    if _subs:
+        BGE_MODEL_PATH = os.path.join(_snapshots_dir, _subs[0])
+    else:
+        BGE_MODEL_PATH = BGE_MODEL_NAME
+else:
     BGE_MODEL_PATH = BGE_MODEL_NAME
+
+# ChromaDB 向量数据库配置
+CHROMA_DB_PATH = os.path.join(CURRENT_DIR, "chroma_db")
+COLLECTION_NAME = "teaching_kb"
 
 print(f"⏳ 正在加载 BGE 向量模型 ({BGE_MODEL_NAME})...")
 _embedding_model = None
